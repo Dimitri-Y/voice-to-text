@@ -42,8 +42,7 @@ export const transcribeAudio = async (filePath) => {
 const mapLanguageCodeToName = (code) => {
     const languageMap = {
         eng: "English",
-        ukr: "Ukrainian",
-        rus: "Russian"
+        ukr: "Ukrainian"
     };
 
     return languageMap[code] || "Unknown Language";

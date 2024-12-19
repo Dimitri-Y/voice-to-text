@@ -5,6 +5,9 @@ export default clerkMiddleware(async (auth, req) => {
     const { userId } = await auth();
     const isApiRequest = req.url.includes('/api');
     const currentUrl = new URL(req.url, `https://${req.headers.get('host')}`);
+    if (!userId && currentUrl.pathname === '/') {
+        return NextResponse.next();
+    }
     if (!userId) {
         if (isApiRequest) {
             return new Response(JSON.stringify({ error: "Unauthorized" }), {
@@ -22,7 +25,7 @@ export default clerkMiddleware(async (auth, req) => {
         return NextResponse.redirect(url.toString());
     }
 
-    if (!isApiRequest && userId && currentUrl.pathname !== '/dashboard') {
+    if (!isApiRequest && userId && currentUrl.pathname === '/') {
         const url = new URL('/dashboard', currentUrl);
         return NextResponse.redirect(url.toString());
     }

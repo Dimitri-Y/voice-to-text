@@ -3,6 +3,7 @@ import fs from "fs/promises";
 import { randomUUID } from "crypto";
 
 const UPLOAD_DIR = path.join(process.cwd(), process.env.ROOT_PATH ? process.env.ROOT_PATH : "public/uploads");
+const MAX_FILE_SIZE = 25 * 1024 * 1024;
 
 export const uploadFileService = async (file: Blob): Promise<{ filename: string }> => {
     let originalName = (file as File).name;
@@ -12,6 +13,10 @@ export const uploadFileService = async (file: Blob): Promise<{ filename: string 
     const uniqueName = `${baseName}__${randomUUID()}${fileExtension}`;
 
     const buffer = Buffer.from(await file.arrayBuffer());
+
+    if (buffer.length > MAX_FILE_SIZE) {
+        throw new Error("File size exceeds 25MB");
+    }
 
     try {
         await fs.access(UPLOAD_DIR);

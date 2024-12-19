@@ -24,5 +24,6 @@ model Recording {
   language  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  uuid      String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   User      User     @relation(fields: [userId], references: [id])
 }

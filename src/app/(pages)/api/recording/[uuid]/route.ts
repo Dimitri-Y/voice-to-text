@@ -3,15 +3,15 @@ import { getRecordingById } from '@/services/recordingService';
 import { auth } from '@clerk/nextjs/server';
 import { handleError } from '@/utils/handleError';
 
-export async function GET(req: Request, { params }: { params: { id: string } }) {
+export async function GET(req: Request, context: { params: { uuid: string } }) {
     const { userId } = await auth();
-
+    const { uuid } = await context.params;
     if (!userId) {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     try {
-        const recording = await getRecordingById(parseInt(params.id, 10));
+        const recording = await getRecordingById(uuid, userId);
         if (!recording) {
             return NextResponse.json({ error: "Recording not found" }, { status: 404 });
         }

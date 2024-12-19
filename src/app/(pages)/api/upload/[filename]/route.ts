@@ -14,14 +14,13 @@ export const GET = async (req: NextRequest, context: { params: { filename: strin
             return NextResponse.json({ error: "Filename is required" }, { status: 400 });
         }
 
-        const filePath = path.resolve(UPLOAD_DIR, filename);
-
+        const filePath = path.join(UPLOAD_DIR, filename);
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         try { await fs.access(filePath); } catch (error) {
             return NextResponse.json({ error: "File not found" }, { status: 404 });
         }
         const fileContent = await fs.readFile(filePath);
-
+        console.log(filePath);
         const contentType = getContentType(filePath);
 
         if (contentType.startsWith("audio/")) {

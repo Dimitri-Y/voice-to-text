@@ -5,6 +5,7 @@ import { handleError } from '@/utils/handleError';
 import path from "path";
 import { transcribeAudio } from '@/lib/openai.mjs';
 import { uploadFileService } from '@/services/uploadFileService';
+import { groupRecordingsByDate, IRecording } from '@/types/RecordingData';
 
 const UPLOAD_DIR = path.join(process.cwd(), process.env.ROOT_PATH ? process.env.ROOT_PATH : "public/uploads");
 
@@ -17,7 +18,8 @@ export async function GET() {
 
     try {
         const recordings = await getRecordingsByUserClerkId(userId);
-        return NextResponse.json(recordings, { status: 200 });
+        const groupRecordings = groupRecordingsByDate(recordings as IRecording[]);
+        return NextResponse.json(groupRecordings, { status: 200 });
     } catch (error) {
         console.error("Error in GET /api/recordings:", handleError(error));
         return NextResponse.json({ error: handleError(error) }, { status: 500 });
@@ -44,7 +46,6 @@ export async function POST(req: Request) {
                 const content = response?.text;
                 const newRecording = await createRecording({ clerkId: userId, content, filePath: filename, language });
                 return NextResponse.json(newRecording, { status: 201 });
-                // return NextResponse.json({ filename, content, language }, { status: 201 });
             } catch (error) {
                 return NextResponse.json({ error: handleError(error), message: "error OpenAI" }, { status: 500 });
             }

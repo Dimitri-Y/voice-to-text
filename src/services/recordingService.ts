@@ -41,9 +41,18 @@ export const getRecordingsByUserClerkId = async (clerkId: string) => {
     });
 };
 
-export const getRecordingById = async (id: number) => {
+export const getRecordingById = async (uuid: string, clerkId: string) => {
+    const user = await prisma.user.findUnique({
+        where: { clerkId },
+    });
+    if (!user) {
+        throw new Error("User not found");
+    }
     return await prisma.recording.findUnique({
-        where: { id },
+        where: {
+            uuid: uuid,
+            userId: user.id
+        },
     });
 };
 

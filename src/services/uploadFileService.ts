@@ -1,9 +1,9 @@
 import path from "path";
 import fs from "fs/promises";
 import { randomUUID } from "crypto";
+import { MAX_FILE_SIZE } from "@/utils/constants";
 
 const UPLOAD_DIR = path.join(process.cwd(), process.env.ROOT_PATH ? process.env.ROOT_PATH : "public/uploads");
-const MAX_FILE_SIZE = 25 * 1024 * 1024;
 
 export const uploadFileService = async (file: Blob): Promise<{ filename: string }> => {
     let originalName = (file as File).name;

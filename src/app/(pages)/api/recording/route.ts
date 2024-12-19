@@ -6,9 +6,10 @@ import path from "path";
 import { transcribeAudio } from '@/lib/openai.mjs';
 import { uploadFileService } from '@/services/uploadFileService';
 import { groupRecordingsByDate, IRecording } from '@/types/RecordingData';
+import { ALLOWED_AUDIO_TYPES } from '@/utils/constants';
 
 const UPLOAD_DIR = path.join(process.cwd(), process.env.ROOT_PATH ? process.env.ROOT_PATH : "public/uploads");
-const ALLOWED_AUDIO_TYPES = ["audio/mp3", "audio/mpeg", "audio/mp4", "audio/wav", "audio/x-m4a", "audio/m4a"];
+
 
 export async function GET() {
     const { userId } = await auth();

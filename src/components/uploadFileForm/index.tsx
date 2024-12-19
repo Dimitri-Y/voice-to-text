@@ -6,6 +6,7 @@ import { Controller, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { RotatingLinesSpinnerForBtn } from "@/ui/loaderSpinners";
 import { useRouter } from "next/navigation";
+import { ALLOWED_AUDIO_TYPES, MAX_FILE_SIZE, MAX_FILE_SIZE_TEXT } from "@/utils/constants";
 
 interface DEFAULT_STATE {
     file: File | null;
@@ -13,8 +14,6 @@ interface DEFAULT_STATE {
 const DEFAULT_STATE: DEFAULT_STATE = {
     file: null,
 }
-const MAX_FILE_SIZE = 25 * 1024 * 1024;
-const ALLOWED_FILE_TYPES = ["audio/mp3", "audio/mpeg", "audio/mp4", "audio/wav", "audio/x-m4a", "audio/m4a"]
 
 const UploadFileForm = () => {
     const {
@@ -33,13 +32,13 @@ const UploadFileForm = () => {
 
     const handleFileChange = (file: File | undefined) => {
         if (file) {
-            if (!ALLOWED_FILE_TYPES.includes(file.type)) {
+            if (!ALLOWED_AUDIO_TYPES.includes(file.type)) {
                 toast.error("Unsupported file type. Please select an mp3, wav, or m4a file.");
                 toast.error(file.type);
                 setAudioSrc(null);
             }
             if (file.size > MAX_FILE_SIZE) {
-                toast.error("File size exceeds 25MB. Please select a smaller file.");
+                toast.error(`File size exceeds ${MAX_FILE_SIZE_TEXT} MB. Please select a smaller file.`);
                 setAudioSrc(null);
             }
             setAudioSrc(URL.createObjectURL(file));
@@ -52,12 +51,12 @@ const UploadFileForm = () => {
             toast.error(`Please select a file`);
             return;
         }
-        if (!ALLOWED_FILE_TYPES.includes(selectedFile.type)) {
+        if (!ALLOWED_AUDIO_TYPES.includes(selectedFile.type)) {
             toast.error("Unsupported file type. Please select an mp3, wav, or m4a file.");
             return;
         }
         if (selectedFile.size > MAX_FILE_SIZE) {
-            toast.error("File size exceeds 25MB. Please select a smaller file.");
+            toast.error(`File size exceeds ${MAX_FILE_SIZE_TEXT} MB. Please select a smaller file.`);
             return;
         }
         const formData = new FormData()
@@ -93,7 +92,7 @@ const UploadFileForm = () => {
                                     </svg>
                                     <p className="mb-2 text-base text-gray-500 dark:text-gray-400">
                                         <span className="font-semibold">Click to upload</span> or drag and drop</p>
-                                    <p className="text-sm text-gray-500 dark:text-gray-400">Supported format: mp3, wav or m4a (MAX. 25MB)</p>
+                                    <p className="text-sm text-gray-500 dark:text-gray-400">Supported format: mp3, wav or m4a (MAX. 5MB)</p>
                                     <p className="text-sm text-gray-500 dark:text-gray-400">Language: English, Ukranian</p>
                                 </div>
                                 <input

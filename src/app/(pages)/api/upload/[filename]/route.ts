@@ -6,13 +6,10 @@ import { handleError } from "@/utils/handleError";
 const UPLOAD_DIR = path.join(process.cwd(),
     process.env.ROOT_PATH ? process.env.ROOT_PATH : "public/uploads");
 
-type Context = {
-    params: { filename: string }
-};
 
-export const GET = async (req: NextRequest, { params }: Context) => {
+export const GET = async (req: NextRequest, { params }: { params: Promise<{ filename: string }> }) => {
     try {
-        const { filename } = params;
+        const filename = (await params).filename;
 
         if (!filename) {
             return NextResponse.json({ error: "Filename is required" }, { status: 400 });

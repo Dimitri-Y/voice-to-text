@@ -3,13 +3,11 @@ import { getRecordingById } from '@/services/recordingService';
 import { auth } from '@clerk/nextjs/server';
 import { handleError } from '@/utils/handleError';
 
-type Context = {
-    params: { uuid: string }
-};
 
-export async function GET(req: Request, { params }: Context) {
+
+export async function GET(req: Request, { params }: { params: Promise<{ uuid: string }> }) {
     const { userId } = await auth();
-    const { uuid } = params;
+    const uuid = (await params).uuid;
 
     if (!userId) {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

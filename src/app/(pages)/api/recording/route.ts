@@ -8,6 +8,7 @@ import { uploadFileService } from '@/services/uploadFileService';
 import { groupRecordingsByDate, IRecording } from '@/types/RecordingData';
 
 const UPLOAD_DIR = path.join(process.cwd(), process.env.ROOT_PATH ? process.env.ROOT_PATH : "public/uploads");
+const ALLOWED_AUDIO_TYPES = ["audio/mp3", "audio/mpeg", "audio/mp4", "audio/wav", "audio/x-m4a", "audio/m4a"];
 
 export async function GET() {
     const { userId } = await auth();
@@ -34,8 +35,15 @@ export async function POST(req: Request) {
         }
         const formData = await req.formData();
         const body = Object.fromEntries(formData);
-        const file = (body.file as Blob) || null; if (!file) {
+        const file = (body.file as Blob) || null;
+        if (!file) {
             return NextResponse.json({ error: "File is required" }, { status: 400 });
+        }
+        if (!ALLOWED_AUDIO_TYPES.includes(file.type)) {
+            return NextResponse.json({
+                error: "Unsupported file type. Only audio files are allowed."
+            }, { status: 400 });
+
         }
         try {
             const { filename } = await uploadFileService(file);

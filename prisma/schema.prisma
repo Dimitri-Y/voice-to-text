@@ -13,6 +13,7 @@ model User {
   firstName  String
   email      String      @unique
   clerkId    String      @unique
+  isPremium  Boolean     @default(false)
   recordings Recording[]
 }
 

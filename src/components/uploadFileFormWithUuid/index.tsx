@@ -40,12 +40,12 @@ const UploadFileFormWithUuid: React.FC<UploadFileProps> = ({ recording }) => {
                     <div className="flex items-center justify-center w-full">
                         <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600 transition duration-300 ease-in-out">
                             <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                                <svg className="w-10 h-10 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                                    <path stroke="currentColor" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
+                                <svg className="w-10 h-10  mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" d="M14 8H4m8 3.5v5M9.5 14h5M4 6v13a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1h-5.032a1 1 0 0 1-.768-.36l-1.9-2.28a1 1 0 0 0-.768-.36H5a1 1 0 0 0-1 1Z" />
                                 </svg>
+
                                 <p className="mb-2 text-base text-gray-500 dark:text-gray-400">
-                                    <span className="font-semibold">To dashboard</span> to transcribe drag and drop</p>
-                                {/* <p className="text-sm text-gray-500 dark:text-gray-400">Supported format: mp3, wav or m4a (MAX. 25MB)</p> */}
+                                    <span className="text-lg font-semibold">To dashboard</span> to transcribe audio</p>
                             </div>
                         </label>
                     </div>
@@ -58,7 +58,7 @@ const UploadFileFormWithUuid: React.FC<UploadFileProps> = ({ recording }) => {
                             Error uploaded audio
                         </div>
                     </div> : audioSrc && (
-                        <div className="mt-4">
+                        <div className="mt-4 p-4">
                             <audio controls src={audioSrc} className="w-full">
                                 Your browser does not support the audio element. </audio>
                         </div>

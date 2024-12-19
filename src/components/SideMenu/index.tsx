@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { useApi } from "@/hooks/useApi";
 import { RotatingLinesSpinnerForChat } from "@/ui/loaderSpinners";
-import GroupRecords from "../GroupRecords.tsx";
+import GroupRecords from "@/components/GroupRecords";
 
 interface SideMenuProps {
     uuid?: string;

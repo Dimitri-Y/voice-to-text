@@ -6,4 +6,5 @@ export interface IUser {
     name: string;
     clerkId: string;
     recordings: IRecording[]
+    isPremium: boolean;
 }

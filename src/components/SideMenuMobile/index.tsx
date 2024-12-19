@@ -4,7 +4,7 @@ import { IRecordingGroup } from "@/types/RecordingData";
 import { RotatingLinesSpinnerForChat } from "@/ui/loaderSpinners";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import GroupRecords from "../GroupRecords.tsx";
+import GroupRecords from "@/components/GroupRecords";
 
 interface SideMenuProps {
     uuid?: string;

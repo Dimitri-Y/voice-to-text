@@ -14,6 +14,7 @@ const DEFAULT_STATE: DEFAULT_STATE = {
     file: null,
 }
 const MAX_FILE_SIZE = 25 * 1024 * 1024;
+const ALLOWED_FILE_TYPES = ["audio/mp3", "audio/mpeg", "audio/mp4", "audio/wav", "audio/x-m4a", "audio/m4a"]
 
 const UploadFileForm = () => {
     const {
@@ -32,9 +33,14 @@ const UploadFileForm = () => {
 
     const handleFileChange = (file: File | undefined) => {
         if (file) {
+            if (!ALLOWED_FILE_TYPES.includes(file.type)) {
+                toast.error("Unsupported file type. Please select an mp3, wav, or m4a file.");
+                toast.error(file.type);
+                setAudioSrc(null);
+            }
             if (file.size > MAX_FILE_SIZE) {
                 toast.error("File size exceeds 25MB. Please select a smaller file.");
-                return;
+                setAudioSrc(null);
             }
             setAudioSrc(URL.createObjectURL(file));
         } else {
@@ -44,6 +50,10 @@ const UploadFileForm = () => {
     const onSubmit = async () => {
         if (!selectedFile) {
             toast.error(`Please select a file`);
+            return;
+        }
+        if (!ALLOWED_FILE_TYPES.includes(selectedFile.type)) {
+            toast.error("Unsupported file type. Please select an mp3, wav, or m4a file.");
             return;
         }
         if (selectedFile.size > MAX_FILE_SIZE) {
@@ -56,11 +66,11 @@ const UploadFileForm = () => {
         const uploadRecording = await request('/api/recording', {
             method: 'POST',
             body: formData,
-        });
+        }, true);
         if (uploadRecording.status === 201) {
             const responseData = await uploadRecording.json();
             toast.success(`File ${responseData.filepath} uploaded successfully`);
-            router.push(`dashboard/${responseData.uuid}`);
+            router.replace(`dashboard/${responseData.uuid}`);
         }
         if (error) {
             toast.error("Error uploading file")
@@ -102,18 +112,21 @@ const UploadFileForm = () => {
                     )}
                 />
                 {audioSrc && (
-                    <div className="mt-4">
+                    <div className="mt-4 p-4">
                         <audio controls src={audioSrc} className="w-full">
                             Your browser does not support the audio element. </audio>
                     </div>
                 )}
                 <button
                     type="submit"
-                    className="w-full bg-blue-600 text-white py-2 rounded-md text-base font-medium hover:bg-blue-700 mt-4 transition duration-300 ease-in-out"
+                    className="w-full bg-blue-600 text-white py-2 rounded-md text-base font-medium hover:bg-blue-700 mt-4 transition duration-300 ease-in-out flex items-center justify-center"
                     disabled={isLoading}
                 >
                     {isLoading ? (
-                        <>Upload and Transcribe <RotatingLinesSpinnerForBtn color={"#fff"} /></>
+                        <>
+                            Upload and Transcribe
+                            <RotatingLinesSpinnerForBtn color="#fff" />
+                        </>
                     ) : (
                         "Upload and Transcribe"
                     )}

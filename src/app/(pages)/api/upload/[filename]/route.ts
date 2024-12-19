@@ -20,7 +20,6 @@ export const GET = async (req: NextRequest, context: { params: { filename: strin
             return NextResponse.json({ error: "File not found" }, { status: 404 });
         }
         const fileContent = await fs.readFile(filePath);
-        console.log(filePath);
         const contentType = getContentType(filePath);
 
         if (contentType.startsWith("audio/")) {

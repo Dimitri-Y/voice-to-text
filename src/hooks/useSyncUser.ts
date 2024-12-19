@@ -7,6 +7,7 @@ const useSyncUser = () => {
     const [hasSyncedUser, setHasSyncedUser] = useState(false);
 
     const syncUser = async () => {
+        console.log(user);
         if (!user || hasSyncedUser) return;
         try {
             const res = await fetch("/api/sync-user", {

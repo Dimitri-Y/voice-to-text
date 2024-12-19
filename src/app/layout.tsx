@@ -27,23 +27,23 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <SideMenuProvider>
-      <ClerkProvider>
-        <html lang="en">
-          <Head>
-            <link rel='icon' href='./favicon.ico' sizes='any' />
-          </Head>
-          <body
-            className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-          >
+    <html lang="en">
+      <Head>
+        <link rel='icon' href='./favicon.ico' sizes='any' />
+      </Head>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        <SideMenuProvider>
+          <ClerkProvider>
             <ToastContainer
               className={"text-sm font-white font-med block p-3"}
               position="bottom-left"
               autoClose={4000} />
             {children}
-          </body>
-        </html>
-      </ClerkProvider>
-    </SideMenuProvider>
+          </ClerkProvider>
+        </SideMenuProvider>
+      </body>
+    </html>
   );
 }

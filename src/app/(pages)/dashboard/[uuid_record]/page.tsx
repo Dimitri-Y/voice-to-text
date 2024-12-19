@@ -9,6 +9,7 @@ import { IRecording } from "@/types/RecordingData";
 import { useUser } from "@clerk/nextjs";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { UserSyncProvider } from "@/providers/userSync.provider";
 
 const Dashboard = () => {
     const { user } = useUser();
@@ -25,23 +26,25 @@ const Dashboard = () => {
     }, []);
     return (
         <>
-            {user && (
-                <Header />
-            )}
-            <main className="flex relative">
-                {user && <SideMenuMobile uuid={uuid_record as string} />}
-                <div className="hidden md:block w-96">
-                    {user && <SideMenu uuid={uuid_record as string} />}
-                </div>
-                <div className="flex-1 container mx-auto py-8">
-                    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
-                        <div className="bg-white p-8 rounded-md shadow-md w-full max-w-md lg:max-w-3xl">
-                            {user && recording && <UploadFileFormWithUuid recording={recording} />}
-                            {uuid_record && <RecordingCard isLoading={isLoading} recording={recording as IRecording} error={error} />}
+            <UserSyncProvider>
+                {user && (
+                    <Header />
+                )}
+                <main className="flex relative">
+                    {user && <SideMenuMobile uuid={uuid_record as string} />}
+                    <div className="hidden md:block w-96">
+                        {user && <SideMenu uuid={uuid_record as string} />}
+                    </div>
+                    <div className="flex-1 container mx-auto py-8">
+                        <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
+                            <div className="bg-white p-8 rounded-md shadow-md w-full max-w-md lg:max-w-3xl">
+                                {user && recording && <UploadFileFormWithUuid recording={recording} />}
+                                {uuid_record && <RecordingCard isLoading={isLoading} recording={recording as IRecording} error={error} />}
+                            </div>
                         </div>
                     </div>
-                </div>
-            </main>
+                </main>
+            </UserSyncProvider>
         </>
     );
 };

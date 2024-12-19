@@ -1,15 +1,27 @@
 "use server";
-import { NextApiRequest, NextApiResponse } from 'next';
+
+import { NextResponse } from "next/server";
 
 export type ResponseData = {
-    success: boolean,
-    message: string
-}
-export async function GET(req: NextApiRequest, res: NextApiResponse<ResponseData>) {
+    success: boolean;
+    message: string;
+};
+
+export async function GET() {
     try {
-        return res.status(200).json({ success: true, message: "this is API" });
+        const response: ResponseData = {
+            success: true,
+            message: "this is API",
+        };
+
+        return NextResponse.json(response, { status: 200 });
     } catch (error) {
-        console.error('Sync User Error:', error);
-        return res.status(500).json({ success: false, message: 'Internal Server Error' });
+        console.error("Sync User Error:", error);
+        const response: ResponseData = {
+            success: false,
+            message: "Internal Server Error",
+        };
+
+        return NextResponse.json(response, { status: 500 });
     }
 }

@@ -15,10 +15,13 @@ const useSyncUser = () => {
             });
 
             const data = await res.json();
-            console.log(data);
             setHasSyncedUser(true);
-            if (res.status === 200 || res.status === 201) {
-                toast.success("User synchronized successfully");
+            if (res.status === 200) {
+                console.log(data);
+            }
+            if (res.status === 201) {
+                toast.success("User synchronized successfully - update this page");
+                console.log(data);
             }
         } catch (error) {
             console.error("Error syncing user:", error);

@@ -69,7 +69,7 @@ const UploadFileForm = () => {
         }, true);
         if (uploadRecording.status === 201) {
             const responseData = await uploadRecording.json();
-            toast.success(`File ${responseData.filepath} uploaded successfully`);
+            toast.success(`File ${responseData.filePath} uploaded successfully`);
             router.replace(`dashboard/${responseData.uuid}`);
         }
         if (error) {

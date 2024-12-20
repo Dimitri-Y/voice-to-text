@@ -2,13 +2,10 @@ import { NextResponse } from 'next/server';
 import { createRecording, getRecordingsByUserClerkId } from '@/services/recordingService';
 import { auth } from '@clerk/nextjs/server';
 import { handleError } from '@/utils/handleError';
-import path from "path";
-import { transcribeAudio } from '@/lib/openai.mjs';
-import { uploadFileService } from '@/services/uploadFileService';
 import { groupRecordingsByDate, IRecording } from '@/types/RecordingData';
 import { ALLOWED_AUDIO_TYPES } from '@/utils/constants';
-
-const UPLOAD_DIR = path.join(process.cwd(), process.env.ROOT_PATH ? process.env.ROOT_PATH : "public/uploads");
+import { uploadFileToS3Service } from '@/services/AwsS3/uploadFileService';
+import { transcribeAudioWithS3 } from '@/lib/openaiFromS3.mjs';
 
 
 export async function GET() {
@@ -47,10 +44,9 @@ export async function POST(req: Request) {
 
         }
         try {
-            const { filename } = await uploadFileService(file);
+            const { filename } = await uploadFileToS3Service(file);
             try {
-                const filePath = path.resolve(UPLOAD_DIR, filename);
-                const response = await transcribeAudio(filePath);
+                const response = await transcribeAudioWithS3(filename);
                 const language = response?.language;
                 const content = response?.text;
                 const newRecording = await createRecording({ clerkId: userId, content, filePath: filename, language });

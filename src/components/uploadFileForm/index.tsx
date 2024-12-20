@@ -61,14 +61,13 @@ const UploadFileForm = () => {
         }
         const formData = new FormData()
         formData.append('file', selectedFile)
-
         const uploadRecording = await request('/api/recording', {
             method: 'POST',
             body: formData,
         }, true);
         if (uploadRecording.status === 201) {
             const responseData = await uploadRecording.json();
-            toast.success(`File ${responseData.filePath} uploaded successfully`);
+            toast.success(`File ${selectedFile.name} uploaded successfully`);
             router.replace(`dashboard/${responseData.uuid}`);
         }
         if (error) {

@@ -1,10 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import path from "path";
-import fs from "fs/promises";
 import { handleError } from "@/utils/handleError";
-
-const UPLOAD_DIR = path.join(process.cwd(),
-    process.env.ROOT_PATH ? process.env.ROOT_PATH : "public/uploads");
+import { getFileFromS3Service } from "@/services/AwsS3/getFileService";
 
 
 export const GET = async (req: NextRequest, { params }: { params: Promise<{ filename: string }> }) => {
@@ -14,14 +10,11 @@ export const GET = async (req: NextRequest, { params }: { params: Promise<{ file
         if (!filename) {
             return NextResponse.json({ error: "Filename is required" }, { status: 400 });
         }
-
-        const filePath = path.join(UPLOAD_DIR, filename);
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        try { await fs.access(filePath); } catch (error) {
-            return NextResponse.json({ error: "File not found" }, { status: 404 });
-        }
-        const fileContent = await fs.readFile(filePath);
-        const contentType = getContentType(filePath);
+        // const { fileContent, contentType } = await getFileService(filename);
+        const encodedKey = encodeURIComponent(filename);
+        console.log(encodedKey);
+        const fileContent = await getFileFromS3Service(encodedKey);
+        const contentType = "application/octet-stream";
 
         if (contentType.startsWith("audio/")) {
             return new NextResponse(fileContent, {
@@ -36,39 +29,12 @@ export const GET = async (req: NextRequest, { params }: { params: Promise<{ file
                 status: 200,
                 headers: {
                     "Content-Type": contentType,
-                    "Content-Disposition": `attachment; filename="${filename}"`,
+                    "Content-Disposition": `attachment; filename="${encodeURIComponent(filename)}"`,
                 },
             });
         }
     } catch (error) {
         console.error("Error in GET /api/upload/:filename :", handleError(error));
         return NextResponse.json({ error: handleError(error) }, { status: 500 });
-    }
-};
-
-const getContentType = (filePath: string): string => {
-    const extension = path.extname(filePath).toLowerCase();
-    switch (extension) {
-        case ".mp3":
-            return "audio/mpeg";
-        case ".wav":
-            return "audio/wav";
-        case ".m4a":
-            return "audio/x-m4a";
-        case ".ogg":
-            return "audio/ogg";
-        case ".png":
-            return "image/png";
-        case ".jpg":
-        case ".jpeg":
-            return "image/jpeg";
-        case ".gif":
-            return "image/gif";
-        case ".txt":
-            return "text/plain";
-        case ".pdf":
-            return "application/pdf";
-        default:
-            return "application/octet-stream";
     }
 };

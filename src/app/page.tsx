@@ -36,8 +36,9 @@ const Home = () => {
             <li>Create an account or sign in using the &quot;Sign In or Sign Up&quot; button.</li>
             <li>Once signed in, you can upload voice recordings on the dashboard.</li>
             <li>Your recordings will be processed into text using OpenAI&apos;s API.</li>
-            <li>All actions, including uploads and processing, are logged in the database.</li>
+            <li>All actions, including uploads and processing, are logged in the database. File saves on AWS S3 Cloud</li>
             <li>View your past recordings on the dashboard in a list format, similar to ChatGPT.</li>
+            <li>If you in this page and you don&apos;t see &quot;Sign In or Sign Up&quot; , click to User Button and sign out </li>
           </ul>
           <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
             If you encounter any issues, please contact support.

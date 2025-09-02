@@ -8,7 +8,7 @@ datasource db {
 }
 
 model User {
-  id         Int         @id @default(autoincrement())
+  id         String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   username   String
   firstName  String
   email      String      @unique
@@ -18,13 +18,12 @@ model User {
 }
 
 model Recording {
-  id        Int      @id @default(autoincrement())
-  userId    Int
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String   @db.Uuid
   content   String
   filePath  String
   language  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  uuid      String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   User      User     @relation(fields: [userId], references: [id])
 }

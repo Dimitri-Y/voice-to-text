@@ -1,5 +1,5 @@
 export interface IRecording {
-    id: number;
+    id: string;
     content: string;
     filePath: string;
     language: string;

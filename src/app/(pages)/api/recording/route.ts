@@ -17,7 +17,7 @@ export async function GET() {
 
     try {
         const recordings = await getRecordingsByUserClerkId(userId);
-        const groupRecordings = groupRecordingsByDate(recordings as IRecording[]);
+        const groupRecordings = groupRecordingsByDate(recordings as unknown as IRecording[]);
         return NextResponse.json(groupRecordings, { status: 200 });
     } catch (error) {
         console.error("Error in GET /api/recordings:", handleError(error));

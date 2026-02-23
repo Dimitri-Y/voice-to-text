@@ -16,8 +16,10 @@ export const GET = async (req: NextRequest, { params }: { params: Promise<{ file
         const fileContent = await getFileFromS3Service(encodedKey);
         const contentType = "application/octet-stream";
 
+        const body = new Uint8Array(fileContent);
+
         if (contentType.startsWith("audio/")) {
-            return new NextResponse(fileContent, {
+            return new NextResponse(body, {
                 status: 200,
                 headers: {
                     "Content-Type": contentType,
@@ -25,7 +27,7 @@ export const GET = async (req: NextRequest, { params }: { params: Promise<{ file
                 },
             });
         } else {
-            return new NextResponse(fileContent, {
+            return new NextResponse(body, {
                 status: 200,
                 headers: {
                     "Content-Type": contentType,

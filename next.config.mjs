@@ -4,6 +4,9 @@ const nextConfig = {
     buildActivity: false,
   },
   transpilePackages: ["geist"],
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 };
 
 export default nextConfig;

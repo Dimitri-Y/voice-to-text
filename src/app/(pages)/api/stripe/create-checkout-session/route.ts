@@ -1,4 +1,5 @@
 import { stripe } from '@/lib/stripe';
+import { handleError } from '@/utils/handleError';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(
@@ -33,6 +34,7 @@ export default async function handler(
 
     res.status(200).json({ url: session.url });
   } catch (err) {
-    res.status(500).json({ error: 'Stripe session creation failed' });
+    console.error("Error in POST /api/stripe/create-checkout-session :", handleError(err));
+    res.status(500).json({ error: handleError(err) });
   }
 }

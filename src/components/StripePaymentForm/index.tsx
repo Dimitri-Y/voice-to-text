@@ -1,12 +1,12 @@
 "use client";
 
-import { loadStripe } from "@stripe/stripe-js";
+// import { loadStripe } from "@stripe/stripe-js";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
-const stripePromise = loadStripe(
-  process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY || ""
-);
+// const stripePromise = loadStripe(
+//   process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY || ""
+// );
 
 interface StripeMenuProps {
   userId: string;

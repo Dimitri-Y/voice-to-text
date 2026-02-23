@@ -15,6 +15,8 @@ model User {
   clerkId    String      @unique
   isPremium  Boolean     @default(false)
   recordings Recording[]
+  payments      Payment[]
+  subscriptions Subscription[]
 }
 
 model Recording {
@@ -26,4 +28,31 @@ model Recording {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   User      User     @relation(fields: [userId], references: [id])
+}
+
+model Payment {
+  id               String   @id @default(uuid()) @db.Uuid
+  userId           String   @db.Uuid
+  stripeChargeId   String   @unique
+  amount           Int
+  currency         String   @default("UAH")
+  status           String
+  createdAt        DateTime @default(now())
+  User             User     @relation(fields: [userId], references: [id])
+}
+
+model Subscription {
+  id                      String   @id @default(uuid()) @db.Uuid
+  userId                  String   @db.Uuid
+  stripeSubscriptionId    String   @unique
+  plan                    PlanType
+  status                  String
+  currentPeriodEnd        DateTime
+  User                    User     @relation(fields: [userId], references: [id])
+}
+
+enum PlanType {
+  FREE
+  ONE_TIME
+  MONTHLY
 }
